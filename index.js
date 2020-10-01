@@ -13,26 +13,10 @@ app.use(express.urlencoded({
 app.use(express.json());
 
 //TableList
-var tableList = [
-    {
-    table: "",
-    id: "",
-    name: "",
-    email: "",
-    phone: "",
-},
-];
+var tableList = [];
 
 // WaitList
-var waitList = [
-    {
-    table: "",
-    id: "",
-    name: "",
-    email: "",
-    phone: "",
-},
-];
+var waitList = [];
 
 // Routes
 // Basic route that sends the user first to the AJAX Page
@@ -40,22 +24,22 @@ app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "home.html"));
 });
 
-app.get("/add", function (req, res) {
+app.get("/tables", function (req, res) {
     res.sendFile(path.join(__dirname, "tables.html"));
 });
 
-app.get("/add", function (req, res) {
+app.get("/reserve", function (req, res) {
     res.sendFile(path.join(__dirname, "reserve.html"));
 });
 
 // Displays all tables
 app.get("/api/tables", function (req, res) {
-    return res.json(tables);
+    return res.json(tableList);
 });
 
 // Displays all reservations
 app.get("/api/waitlist", function (req, res) {
-    return res.json(waitlist);
+    return res.json(waitList);
 });
 
 // Create New Characters - takes in JSON input
@@ -66,11 +50,19 @@ app.post("/api/tables", function (req, res) {
 
     // Using a RegEx Pattern to remove spaces from newCharacter
     // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-
+    
     console.log(newTable);
 
-    tableList.push(newTable);
-
+    //number of tables
+    function numberOfTables() {
+        if (this.tableList.length > 5) {
+          console.log("Tables are full. You will be on waitlist");
+        } else {
+          console.log("We will seat you right away!");
+          tableList.push(newTable);
+        }
+      }
+      numberOfTables();
     res.json(newTable);
 });
 
